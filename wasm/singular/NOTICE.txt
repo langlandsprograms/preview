@@ -38,9 +38,13 @@ Retain their licenses when rebuilding or redistributing the engine.
 Local integration:
   worker.js is the application's batch-only browser adapter. It uses no
   SharedArrayBuffer, cross-origin isolation headers, remote computation, or
-  interactive terminal. Every calculation runs in a fresh disposable worker.
-  Only the generated Singular program and its textual output pass between
-  workers. The application itself is not a port of Macaulay2.
+  interactive terminal. The page downloads the three assets and compiles the
+  WebAssembly module once, caching them across batches and packet computations.
+  Each CLI batch runs in a fresh disposable worker with independent interpreter
+  state. Its module is instantiated from the compiled cache; library data and
+  the runtime are supplied from memory. Cancellation terminates the active
+  workers without discarding the reusable assets. The application itself is
+  not a port of Macaulay2.
 
 Verify the sizes and SHA-256 hashes of the three engine assets against
 engine-manifest.json. Replacement downloads from the upstream engine URL

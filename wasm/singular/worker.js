@@ -1,4 +1,6 @@
-/* Singular runs entirely inside this disposable browser worker. */
+/* Each CLI batch has fresh state; assets and compiled code come from the
+ * page's shared cache. This worker makes no engine-asset network requests.
+ */
 let started = false;
 self.onmessage = ({data}) => {
   if (started || data.type !== 'run') return;
@@ -10,11 +12,27 @@ self.onmessage = ({data}) => {
     self.postMessage({type: 'done', code, error});
     self.close();
   };
+  if (!data.assets || !(data.assets.module instanceof WebAssembly.Module)
+    || !(data.assets.libraryData instanceof ArrayBuffer) || typeof data.assets.runtimeUrl !== 'string') {
+    finish(1, 'Missing cached Singular engine assets.');
+    return;
+  }
   self.Module = {
     arguments: ['-q', '--no-rc', '--no-tty', '/workspace/abv.sing'],
     noInitialRun: false,
     noExitRuntime: false,
     locateFile: path => new URL(path, self.location.href).href,
+    getPreloadedPackage: () => data.assets.libraryData,
+    instantiateWasm: (imports, receiveInstance) => {
+      try {
+        const instance = new WebAssembly.Instance(data.assets.module, imports);
+        receiveInstance(instance, data.assets.module);
+        return instance.exports;
+      } catch (error) {
+        finish(1, String(error));
+        return {};
+      }
+    },
     print: text => self.postMessage({type: 'stdout', text: String(text)}),
     printErr: text => self.postMessage({type: 'stderr', text: String(text)}),
     preRun: [() => {
@@ -27,7 +45,7 @@ self.onmessage = ({data}) => {
     onExit: code => finish(code),
   };
   try {
-    importScripts('Singular.js');
+    importScripts(data.assets.runtimeUrl);
   } catch (error) {
     finish(1, String(error));
   }
