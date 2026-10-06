@@ -1,0 +1,3 @@
+Singular.data binary
+Singular.wasm binary
+Singular.js -text -diff

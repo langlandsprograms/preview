@@ -1,0 +1,24 @@
+{
+  "assets": {
+    "engine/Singular.data": {
+      "bytes": 23300931,
+      "sha256": "3867b20330fac179fc5b28f8cf86e6192c919b36d4b5e0f8ae31851db99473fa",
+      "sha384": "07600e49cdfe1edd31638b9956d2fc1b87615491f055b2fb82ce4451ff318237ac02ba6e29a017aa4b65d430d71ae420"
+    },
+    "engine/Singular.js": {
+      "bytes": 193746,
+      "sha256": "740f13f51fc8a4ac6a4c1928f904c8677978c2f3f1abf23c50d9954c86b53450",
+      "sha384": "ea35851b0264e00a2162c42446aa4af615e36cd81bb8d6a95ed30771c0d426323a8cdf3a552b6cd665270cfc84dc92d8"
+    },
+    "engine/Singular.wasm": {
+      "bytes": 23732876,
+      "sha256": "7a6ad26d0893f3a368d43518591030aba6f084822d71af2f0f1adc1a0b7aa7f3",
+      "sha384": "10a14d12efedb4030ae0d3a9e6175eeb7322efb36e3083e76a79a572cd6a5a696068ec2a377240e3bfaaf3e21550198a"
+    }
+  },
+  "format": "singular-browser-workbench.asset-manifest.v1",
+  "generatedAt": "2026-07-01T13:53:25Z",
+  "name": "Singular WebAssembly engine",
+  "packages": {},
+  "source": "current Singular checkout; emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.23 (5ae63ce7dd955df449cb419bfe5afc51d1bd57f2)"
+}

@@ -1,0 +1,49 @@
+Singular WebAssembly engine for the GL(n) ABV calculator
+======================================================
+
+Singular.js, Singular.wasm, and Singular.data are unmodified assets from:
+  https://singular-in-browser.pages.dev/engine/
+
+The upstream engine-manifest.json is included verbatim. All three assets have
+been verified against its SHA-256 hashes. Its build date is 2026-07-01, and the
+engine reports system("version") = 44105 (Singular 4.4.1, patch 5).
+The manifest identifies Emscripten 3.1.23. It does not record the Singular git
+revision; we do not claim that the downloaded binaries were rebuilt locally.
+
+Singular authors: W. Decker, G.-M. Greuel, G. Pfister, H. Schoenemann.
+Copyright (C) 1986-2025. See COPYING for the upstream copyright notice and
+component acknowledgements, and LICENSE for the GNU GPL version 3.
+Singular is distributed under the GNU GPL, version 2 or version 3, with
+individual component licenses as described in COPYING and their source trees.
+The browser build support is also distributed under GPL-3.0.
+
+Source code and build instructions:
+  https://github.com/Singular/Singular
+  https://github.com/Singular/Singular-in-browser
+
+Source snapshots current at the manifest's build time:
+  https://github.com/Singular/Singular/tree/fea562cea6f31f87e0e1ac9a671d389bfdc62bd5
+  https://github.com/Singular/Singular-in-browser/tree/0dbc37f0804472317322a79a15360e34152f4115
+
+Downloadable source archives (including copyright/license files):
+  https://github.com/Singular/Singular/archive/fea562cea6f31f87e0e1ac9a671d389bfdc62bd5.tar.gz
+  https://github.com/Singular/Singular-in-browser/archive/0dbc37f0804472317322a79a15360e34152f4115.tar.gz
+
+The upstream build workflow checks out Singular, overlays Singular-in-browser
+into emscripten/, then runs web-workbench/scripts/build-full-wasm.sh.
+The companion singular-wasm-build.sh specifies and downloads the arithmetic
+dependencies and their sources (GMP, MPFR, FLINT, NTL, cddlib, and Normaliz).
+Retain their licenses when rebuilding or redistributing the engine.
+
+Local integration:
+  worker.js is the application's batch-only browser adapter. It uses no
+  SharedArrayBuffer, cross-origin isolation headers, remote computation, or
+  interactive terminal. Every calculation runs in a fresh disposable worker.
+  Only the generated Singular program and its textual output pass between
+  workers. The application itself is not a port of Macaulay2.
+
+Verify the sizes and SHA-256 hashes of the three engine assets against
+engine-manifest.json. Replacement downloads from the upstream engine URL
+must match these pinned hashes before replacing any asset. Updating the
+engine requires updating the manifest and rerunning the native and browser
+regressions; do not mix files from different engine builds.
